@@ -1,0 +1,35 @@
+{
+  "name": "eye-nemo-admin",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run contracts:check && tsc -b && vite build",
+    "test": "vitest run",
+    "lint": "tsc --noEmit",
+    "contracts:sync": "node scripts/api-contract.mjs sync",
+    "contracts:generate": "node scripts/api-contract.mjs generate",
+    "contracts:check": "node scripts/api-contract.mjs check",
+    "contracts:test": "node --test scripts/api-contract.test.mjs",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@tanstack/react-virtual": "^3.14.13",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@testing-library/dom": "^10.4.2",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^6.1.2",
+    "jsdom": "^26.1.0",
+    "openapi-typescript": "7.13.0",
+    "typescript": "^5.9.2",
+    "vite": "^8.3.3",
+    "vitest": "^5.0.3"
+  }
+}
