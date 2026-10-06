@@ -61,7 +61,7 @@ export default function Filters({
         name={key}
         type="datetime-local"
         defaultValue={
-          params.get(key)
+          params.get(key) && !Number.isNaN(new Date(params.get(key)!).getTime())
             ? new Date(
                 new Date(params.get(key)!).getTime() -
                   new Date(params.get(key)!).getTimezoneOffset() * 60000,

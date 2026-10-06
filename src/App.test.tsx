@@ -114,6 +114,16 @@ afterEach(() => {
 });
 
 describe("administration browser flows", () => {
+  it("handles an invalid date in the URL without crashing the filters", async () => {
+    saveToken("test-session");
+    window.location.hash = "#/media?date_from=invalid-date";
+    render(<App />);
+    await screen.findByText("report.pdf");
+    fireEvent.click(screen.getByRole("button", { name: /Фільтри/ }));
+    expect((screen.getByLabelText("Від дати") as HTMLInputElement).value).toBe(
+      "",
+    );
+  });
   it("signs in and stores only a session token", async () => {
     render(<App />);
     fireEvent.change(screen.getByLabelText("Логін"), {

@@ -273,6 +273,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin-api/owners/{owner_id}/connections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Owner Connections */
+        get: operations["administrationOwnerConnections"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin-api/participants": {
         parameters: {
             query?: never;
@@ -869,6 +886,34 @@ export interface components {
             deleted: number;
             /** Failed */
             failed: number;
+        };
+        /** ConnectionPage */
+        ConnectionPage: {
+            /** Items */
+            items: components["schemas"]["ConnectionResponse"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+        };
+        /** ConnectionResponse */
+        ConnectionResponse: {
+            /** Connected At */
+            connected_at: string | null;
+            /** Disconnected At */
+            disconnected_at: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Is Enabled */
+            is_enabled: boolean;
+            /** Telegram Business Connection Id */
+            telegram_business_connection_id: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
         };
         /** DashboardResponse */
         DashboardResponse: {
@@ -2302,6 +2347,75 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PeoplePage"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Invalid selection or filters */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    administrationOwnerConnections: {
+        parameters: {
+            query?: {
+                q?: string;
+                owner_id?: number | null;
+                participant_id?: number | null;
+                chat_id?: string | null;
+                message_id?: string | null;
+                date_from?: string | null;
+                date_to?: string | null;
+                direction?: ("incoming" | "outgoing") | null;
+                content_type?: string | null;
+                edited?: boolean | null;
+                deleted?: boolean | null;
+                saved_by_reply?: boolean | null;
+                filename?: string | null;
+                mime?: string | null;
+                min_size?: number | null;
+                max_size?: number | null;
+                availability?: ("stored" | "pending" | "failed" | "expired" | "deleted") | null;
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                owner_id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConnectionPage"];
                 };
             };
             /** @description Unauthorized */

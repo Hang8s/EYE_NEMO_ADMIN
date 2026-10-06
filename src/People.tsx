@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Dialog } from "./Dialogs";
-import { type Person, type Purge, request } from "./api";
+import { date, type Person, type Purge, request, type Schemas } from "./api";
 import { navigate } from "./navigation";
 
 export default function People({
@@ -180,6 +180,7 @@ function PersonDialog({
           </small>
         </label>
       )}
+      {kind === "owner" && <Connections ownerId={person.telegram_id} />}
       <div className="actions">
         <button
           className="primary"
@@ -231,5 +232,78 @@ function PersonDialog({
         </button>
       </footer>
     </Dialog>
+  );
+}
+
+function Connections({ ownerId }: { ownerId: number }) {
+  const [items, setItems] = useState<Schemas["ConnectionResponse"][]>([]);
+  const [cursor, setCursor] = useState<string | null>(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    const controller = new AbortController();
+    request<Schemas["ConnectionPage"]>(
+      `/owners/${ownerId}/connections`,
+      undefined,
+      controller.signal,
+    )
+      .then((page) => {
+        setItems(page.items);
+        setCursor(page.next_cursor || null);
+      })
+      .catch((e) => {
+        if (!controller.signal.aborted) setError(e.message);
+      });
+    return () => controller.abort();
+  }, [ownerId]);
+  async function more() {
+    setBusy(true);
+    setError("");
+    try {
+      const page = await request<Schemas["ConnectionPage"]>(
+        `/owners/${ownerId}/connections?cursor=${encodeURIComponent(cursor!)}`,
+      );
+      setItems((old) => [...old, ...page.items]);
+      setCursor(page.next_cursor || null);
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <details>
+      <summary>Підключення Telegram Business</summary>
+      {items.map((connection) => (
+        <div className="system-row" key={connection.id}>
+          <span className="mono">
+            {connection.telegram_business_connection_id}
+            <small>
+              {connection.connected_at
+                ? date(connection.connected_at)
+                : "Дата підключення невідома"}
+              {connection.disconnected_at
+                ? ` · Відключено ${date(connection.disconnected_at)}`
+                : ""}
+            </small>
+          </span>
+          <span
+            className={`badge ${connection.is_enabled ? "success" : "warn"}`}
+          >
+            {connection.is_enabled ? "Активне" : "Відключене"}
+          </span>
+        </div>
+      ))}
+      {error && (
+        <p className="error" role="alert">
+          {error}
+        </p>
+      )}
+      {cursor && (
+        <button onClick={more} disabled={busy}>
+          Ще підключення
+        </button>
+      )}
+    </details>
   );
 }
