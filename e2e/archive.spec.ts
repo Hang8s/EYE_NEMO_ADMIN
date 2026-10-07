@@ -11,6 +11,9 @@ test("browser → API → database: login, chat, media, scoped block, purge, aud
     .fill("preview-password-only");
   await page.getByRole("button", { name: "Увійти →" }).click();
   await expect(page.getByText("Активність архіву")).toBeVisible();
+  await expect(page.getByText("Медіа в черзі", { exact: true })).toBeVisible();
+  await expect(page.getByText("Найстаріше медіазавдання", { exact: true })).toBeVisible();
+  await expect(page.getByText("Час відповіді API, p95 ≲", { exact: true })).toBeVisible();
   await page.screenshot({ path: "test-results/overview.png", fullPage: true });
   await page.getByRole("link", { name: "Власники", exact: false }).click();
   await expect(

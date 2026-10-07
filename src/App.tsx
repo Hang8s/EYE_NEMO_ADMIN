@@ -641,10 +641,30 @@ function Overview({ stats }: { stats: Dashboard }) {
             </button>
           </div>
           <div className="system-row">
-            <span>Операції в черзі</span>
+            <span>Видалення в черзі</span>
             <button className="link" onClick={() => navigate("operations")}>
               {stats.pending_operations} →
             </button>
+          </div>
+          <div className="system-row">
+            <span>Медіа в черзі</span>
+            <b>{stats.pending_media_jobs ?? 0}</b>
+          </div>
+          <div className="system-row">
+            <span>Невиконані медіазавдання</span>
+            <b>{stats.failed_media_jobs ?? 0}</b>
+          </div>
+          <div className="system-row">
+            <span>Найстаріше медіазавдання</span>
+            <b>{stats.oldest_media_job_age_seconds == null ? "—" : `${Math.ceil(stats.oldest_media_job_age_seconds / 60)} хв`}</b>
+          </div>
+          <div className="system-row">
+            <span title="Верхня межа 95-го процентиля за гістограмою; за останні 24 години">Час відповіді API, p95 ≲</span>
+            <b>{stats.api_p95_ms == null ? "—" : `${stats.api_p95_ms} мс`}</b>
+          </div>
+          <div className="system-row">
+            <span>Помилки приймання / очищення / відновлення, 24 год</span>
+            <b>{stats.webhook_errors_24h ?? 0} / {stats.cleanup_errors_24h ?? 0} / {stats.recovery_errors_24h ?? 0}</b>
           </div>
           <div className="system-note">
             <span className="online-dot" />

@@ -878,12 +878,38 @@
       },
       "DashboardResponse": {
         "properties": {
+          "api_p95_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Api P95 Ms"
+          },
+          "api_samples_24h": {
+            "default": 0,
+            "title": "Api Samples 24H",
+            "type": "integer"
+          },
           "chats": {
             "title": "Chats",
             "type": "integer"
           },
+          "cleanup_errors_24h": {
+            "default": 0,
+            "title": "Cleanup Errors 24H",
+            "type": "integer"
+          },
           "failed_downloads": {
             "title": "Failed Downloads",
+            "type": "integer"
+          },
+          "failed_media_jobs": {
+            "default": 0,
+            "title": "Failed Media Jobs",
             "type": "integer"
           },
           "last_24h": {
@@ -902,6 +928,17 @@
             "title": "Messages",
             "type": "integer"
           },
+          "oldest_media_job_age_seconds": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Oldest Media Job Age Seconds"
+          },
           "owners": {
             "title": "Owners",
             "type": "integer"
@@ -910,12 +947,27 @@
             "title": "Participants",
             "type": "integer"
           },
+          "pending_media_jobs": {
+            "default": 0,
+            "title": "Pending Media Jobs",
+            "type": "integer"
+          },
           "pending_operations": {
             "title": "Pending Operations",
             "type": "integer"
           },
+          "recovery_errors_24h": {
+            "default": 0,
+            "title": "Recovery Errors 24H",
+            "type": "integer"
+          },
           "stored_bytes": {
             "title": "Stored Bytes",
+            "type": "integer"
+          },
+          "webhook_errors_24h": {
+            "default": 0,
+            "title": "Webhook Errors 24H",
             "type": "integer"
           }
         },

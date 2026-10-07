@@ -917,10 +917,27 @@ export interface components {
         };
         /** DashboardResponse */
         DashboardResponse: {
+            /** Api P95 Ms */
+            api_p95_ms?: number | null;
+            /**
+             * Api Samples 24H
+             * @default 0
+             */
+            api_samples_24h: number;
             /** Chats */
             chats: number;
+            /**
+             * Cleanup Errors 24H
+             * @default 0
+             */
+            cleanup_errors_24h: number;
             /** Failed Downloads */
             failed_downloads: number;
+            /**
+             * Failed Media Jobs
+             * @default 0
+             */
+            failed_media_jobs: number;
             /** Last 24H */
             last_24h: number;
             /** Last 7D */
@@ -929,14 +946,31 @@ export interface components {
             media: number;
             /** Messages */
             messages: number;
+            /** Oldest Media Job Age Seconds */
+            oldest_media_job_age_seconds?: number | null;
             /** Owners */
             owners: number;
             /** Participants */
             participants: number;
+            /**
+             * Pending Media Jobs
+             * @default 0
+             */
+            pending_media_jobs: number;
             /** Pending Operations */
             pending_operations: number;
+            /**
+             * Recovery Errors 24H
+             * @default 0
+             */
+            recovery_errors_24h: number;
             /** Stored Bytes */
             stored_bytes: number;
+            /**
+             * Webhook Errors 24H
+             * @default 0
+             */
+            webhook_errors_24h: number;
         };
         /** ErrorResponse */
         ErrorResponse: {
