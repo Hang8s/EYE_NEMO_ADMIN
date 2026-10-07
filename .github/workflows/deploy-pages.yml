@@ -71,29 +71,9 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
 
-  backend-readiness:
+  deploy:
     needs: [validate, e2e]
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
-    outputs:
-      ready: ${{ steps.check.outputs.ready }}
-    steps:
-      - id: check
-        env:
-          ADMIN_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
-        run: |
-          status="$(curl --silent --show-error --output /tmp/admin-auth.json --write-out '%{http_code}' --max-time 30 "${ADMIN_API_BASE_URL%/}/admin-api/auth/me")"
-          if [ "$status" = '401' ] && python -c "import json; assert json.load(open('/tmp/admin-auth.json'))['detail'] == 'Увійдіть в адміністративний обліковий запис'"; then
-            echo 'ready=true' >> "$GITHUB_OUTPUT"
-          else
-            echo 'ready=false' >> "$GITHUB_OUTPUT"
-            echo '::notice::Publish the administration backend and migrations first, then rerun this workflow to deploy Pages.'
-          fi
-
-  deploy:
-    needs: [validate, e2e, backend-readiness]
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && needs.backend-readiness.outputs.ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
