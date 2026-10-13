@@ -52,9 +52,14 @@ jobs:
         with:
           path: admin
           persist-credentials: false
+      - name: Verify private backend checkout credentials
+        run: test -n "$BACKEND_READ_TOKEN" || { echo "Configure BACKEND_READ_TOKEN with read access to EYE_NEMO_BACKEND"; exit 1; }
+        env:
+          BACKEND_READ_TOKEN: ${{ secrets.BACKEND_READ_TOKEN }}
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           repository: Hang8s/EYE_NEMO_BACKEND
+          token: ${{ secrets.BACKEND_READ_TOKEN }}
           ref: main
           path: backend
           persist-credentials: false
