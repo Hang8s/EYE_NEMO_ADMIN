@@ -3,6 +3,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { type Attachment, date, type Message, request, typeNames } from "./api";
 import { navigate } from "./navigation";
 import { Dialog } from "./Dialogs";
+import { VersionHistory } from "./VersionHistory";
 
 export function MessageCard({
   item,
@@ -19,6 +20,7 @@ export function MessageCard({
 }) {
   const versions = item.versions || [],
     unversioned = item.unversioned_attachments || [];
+  const [historyOpen, setHistoryOpen] = useState(false);
   return (
     <article className={`message panel ${item.is_outgoing ? "outgoing" : ""}`}>
       <div className="message-meta">
@@ -83,7 +85,11 @@ export function MessageCard({
           </button>
         ))}
       </div>
-      {versions.length > 0 && (
+      {!!item.version_count && <details onToggle={event => setHistoryOpen(event.currentTarget.open)}>
+        <summary>Історія: {item.version_count} версій</summary>
+        {historyOpen && <VersionHistory id={item.id} showMedia={showMedia} />}
+      </details>}
+      {item.version_count == null && versions.length > 0 && (
         <details>
           <summary>Історія: {versions.length} версій</summary>
           {versions.map((v) => (

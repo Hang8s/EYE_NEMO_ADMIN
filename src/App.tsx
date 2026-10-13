@@ -1,4 +1,4 @@
-import { type FormEvent, useEffect, useState } from "react";
+import { type FormEvent, useEffect, useRef, useState } from "react";
 import {
   type Attachment,
   type Audit,
@@ -141,6 +141,8 @@ export default function App() {
   const [revision, setRevision] = useState(0);
   const [rawItems, setItems] = useState<Row[]>([]);
   const [cursor, setCursor] = useState<string | null>(null);
+  const [trimmedMessages, setTrimmedMessages] = useState(false);
+  const generation = useRef(0);
   const [stats, setStats] = useState<Dashboard>();
   const [rawSelected, setSelected] = useState(new Set<string>());
   const [loadedKey, setLoadedKey] = useState("");
@@ -172,9 +174,11 @@ export default function App() {
   useEffect(() => {
     if (!session || view === "settings") return;
     const controller = new AbortController();
+    generation.current += 1;
     setBusy(true);
     setError("");
     setItems([]);
+    setTrimmedMessages(false);
     setCursor(null);
     setSelected(new Set());
     setLoadedKey(`${view}:${query}`);
@@ -238,6 +242,8 @@ export default function App() {
     setError("");
     const requestedView = view,
       requestedQuery = query;
+    const requestedSession = session;
+    const requestedGeneration = generation.current;
     const params = new URLSearchParams(query);
     params.delete("layout");
     params.set("cursor", cursor);
@@ -245,20 +251,27 @@ export default function App() {
       const page = await request<Page<Row>>(`/${view}?${params}`);
       if (
         locationState().view === requestedView &&
-        locationState().params.toString() === requestedQuery
+        locationState().params.toString() === requestedQuery && generation.current === requestedGeneration && token() === requestedSession
       ) {
-        setItems((current) => [
-          ...current,
+        const combined = [
+          ...items,
           ...page.items.filter(
-            (row) => !current.some((old) => idOf(old) === idOf(row)),
+            (row) => !items.some((old) => idOf(old) === idOf(row)),
           ),
-        ]);
+        ];
+        const bounded = view === "messages" ? combined.slice(-500) : combined;
+        if (view === "messages" && combined.length > 500) {
+          setTrimmedMessages(true);
+          const retained = new Set(bounded.map(idOf));
+          setSelected(current => new Set([...current].filter(id => retained.has(id))));
+        }
+        setItems(bounded);
         setCursor(page.next_cursor || null);
       }
     } catch (e) {
       setError((e as Error).message);
     } finally {
-      setBusy(false);
+      if (generation.current === requestedGeneration) setBusy(false);
     }
   }
   async function logout() {
@@ -525,6 +538,7 @@ export default function App() {
                   </p>
                 </div>
               )}
+              {trimmedMessages && <button disabled={busy} onClick={refresh}>До останніх повідомлень</button>}
               {cursor && (
                 <div className="load-more">
                   <button disabled={busy} onClick={more}>
@@ -641,10 +655,22 @@ function Overview({ stats }: { stats: Dashboard }) {
             </button>
           </div>
           <div className="system-row">
-            <span>Операції в черзі</span>
+            <span>Видалення в черзі</span>
             <button className="link" onClick={() => navigate("operations")}>
               {stats.pending_operations} →
             </button>
+          </div>
+          <div className="system-row">
+            <span>Медіа в черзі</span>
+            <b>{stats.pending_media_jobs ?? 0}</b>
+          </div>
+          <div className="system-row">
+            <span>Невиконані медіазавдання</span>
+            <b>{stats.failed_media_jobs ?? 0}</b>
+          </div>
+          <div className="system-row">
+            <span>Найстаріше медіазавдання</span>
+            <b>{stats.oldest_media_job_age_seconds == null ? "—" : `${Math.ceil(stats.oldest_media_job_age_seconds / 60)} хв`}</b>
           </div>
           <div className="system-note">
             <span className="online-dot" />
