@@ -13,7 +13,7 @@ test("browser → API → database: login, chat, media, scoped block, purge, aud
   await expect(page.getByText("Активність архіву")).toBeVisible();
   await expect(page.getByText("Медіа в черзі", { exact: true })).toBeVisible();
   await expect(page.getByText("Найстаріше медіазавдання", { exact: true })).toBeVisible();
-  await expect(page.getByText("Час відповіді API, p95 ≲", { exact: true })).toBeVisible();
+  await expect(page.getByText("Час відповіді API, p95 ≲", { exact: true })).toHaveCount(0);
   await page.screenshot({ path: "test-results/overview.png", fullPage: true });
   await page.getByRole("link", { name: "Власники", exact: false }).click();
   await expect(
@@ -25,6 +25,11 @@ test("browser → API → database: login, chat, media, scoped block, purge, aud
   await expect(
     page.getByText("Привіт! Надсилаю матеріали для проєкту."),
   ).toBeVisible();
+  await expect(page.getByText("Перша редакція матеріалів", { exact: true })).toHaveCount(0);
+  const versionResponse = page.waitForResponse(response => response.url().includes("/versions?") && response.status() === 200);
+  await page.getByText("Історія: 2 версій", { exact: true }).click();
+  await versionResponse;
+  await expect(page.getByText("Перша редакція матеріалів", { exact: true })).toBeVisible();
   await page.screenshot({ path: "test-results/chat.png", fullPage: true });
   await page.getByRole("button", { name: "Медіа цієї вибірки →" }).click();
   await page.getByRole("button", { name: "Відкрити project.txt" }).click();

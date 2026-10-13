@@ -222,6 +222,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin-api/messages/{identifier}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Message Versions */
+        get: operations["administrationMessageVersions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin-api/operations": {
         parameters: {
             query?: never;
@@ -460,6 +477,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/messages/{message_id}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Message Versions */
+        get: operations["adminMessageVersions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/search": {
         parameters: {
             query?: never;
@@ -596,6 +630,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/mini-api/messages/{message_id}/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Message Versions */
+        get: operations["miniMessageVersions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/mini-api/search": {
         parameters: {
             query?: never;
@@ -699,10 +750,14 @@ export interface components {
              * Format: uuid
              */
             chat_id: string;
+            /** Current Version Id */
+            current_version_id?: string | null;
             /** Deleted At */
             deleted_at?: string | null;
             /** Edited At */
             edited_at?: string | null;
+            /** Has Original */
+            has_original?: boolean | null;
             /**
              * Id
              * Format: uuid
@@ -729,6 +784,8 @@ export interface components {
             text?: string | null;
             /** Unversioned Attachments */
             unversioned_attachments?: components["schemas"]["AttachmentResponse"][];
+            /** Version Count */
+            version_count?: number | null;
             /** Versions */
             versions?: components["schemas"]["MessageVersionResponse"][];
         };
@@ -750,10 +807,14 @@ export interface components {
              * Format: uuid
              */
             chat_id: string;
+            /** Current Version Id */
+            current_version_id?: string | null;
             /** Deleted At */
             deleted_at?: string | null;
             /** Edited At */
             edited_at?: string | null;
+            /** Has Original */
+            has_original?: boolean | null;
             /**
              * Id
              * Format: uuid
@@ -780,6 +841,8 @@ export interface components {
             text?: string | null;
             /** Unversioned Attachments */
             unversioned_attachments?: components["schemas"]["AttachmentResponse"][];
+            /** Version Count */
+            version_count?: number | null;
             /** Versions */
             versions?: components["schemas"]["MessageVersionResponse"][];
         };
@@ -917,20 +980,8 @@ export interface components {
         };
         /** DashboardResponse */
         DashboardResponse: {
-            /** Api P95 Ms */
-            api_p95_ms?: number | null;
-            /**
-             * Api Samples 24H
-             * @default 0
-             */
-            api_samples_24h: number;
             /** Chats */
             chats: number;
-            /**
-             * Cleanup Errors 24H
-             * @default 0
-             */
-            cleanup_errors_24h: number;
             /** Failed Downloads */
             failed_downloads: number;
             /**
@@ -959,18 +1010,8 @@ export interface components {
             pending_media_jobs: number;
             /** Pending Operations */
             pending_operations: number;
-            /**
-             * Recovery Errors 24H
-             * @default 0
-             */
-            recovery_errors_24h: number;
             /** Stored Bytes */
             stored_bytes: number;
-            /**
-             * Webhook Errors 24H
-             * @default 0
-             */
-            webhook_errors_24h: number;
         };
         /** ErrorResponse */
         ErrorResponse: {
@@ -1096,6 +1137,8 @@ export interface components {
             chat_id: string;
             /** Chat Title */
             chat_title: string;
+            /** Current Version Id */
+            current_version_id?: string | null;
             /** Deleted At */
             deleted_at?: string | null;
             /** Details */
@@ -1104,6 +1147,8 @@ export interface components {
             };
             /** Edited At */
             edited_at?: string | null;
+            /** Has Original */
+            has_original?: boolean | null;
             /**
              * Has Reply
              * @default false
@@ -1142,8 +1187,23 @@ export interface components {
             text?: string | null;
             /** Unversioned Attachments */
             unversioned_attachments?: components["schemas"]["AttachmentResponse"][];
+            /** Version Count */
+            version_count?: number | null;
             /** Versions */
             versions?: components["schemas"]["MessageVersionResponse"][];
+        };
+        /** MessageVersionPage */
+        MessageVersionPage: {
+            /** Current Version Id */
+            current_version_id: string | null;
+            /** Has Original */
+            has_original: boolean;
+            /** Items */
+            items: components["schemas"]["MessageVersionResponse"][];
+            /** Next Cursor */
+            next_cursor?: string | null;
+            /** Version Count */
+            version_count: number;
         };
         /** MessageVersionResponse */
         MessageVersionResponse: {
@@ -1217,10 +1277,14 @@ export interface components {
              * Format: uuid
              */
             chat_id: string;
+            /** Current Version Id */
+            current_version_id?: string | null;
             /** Deleted At */
             deleted_at?: string | null;
             /** Edited At */
             edited_at?: string | null;
+            /** Has Original */
+            has_original?: boolean | null;
             /**
              * Has Reply
              * @default false
@@ -1253,6 +1317,8 @@ export interface components {
             text?: string | null;
             /** Unversioned Attachments */
             unversioned_attachments?: components["schemas"]["AttachmentResponse"][];
+            /** Version Count */
+            version_count?: number | null;
             /** Versions */
             versions?: components["schemas"]["MessageVersionResponse"][];
         };
@@ -2227,6 +2293,58 @@ export interface operations {
             };
         };
     };
+    administrationMessageVersions: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                identifier: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageVersionPage"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Invalid selection or filters */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     administrationOperations: {
         parameters: {
             query?: {
@@ -3023,6 +3141,69 @@ export interface operations {
             };
         };
     };
+    adminMessageVersions: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                message_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageVersionPage"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     adminSearch: {
         parameters: {
             query: {
@@ -3392,6 +3573,69 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MediaLinkResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    miniMessageVersions: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: {
+                "x-telegram-init-data"?: string | null;
+            };
+            path: {
+                message_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MessageVersionPage"];
                 };
             };
             /** @description Unauthorized */

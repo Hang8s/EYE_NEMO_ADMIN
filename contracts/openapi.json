@@ -210,6 +210,18 @@
             "title": "Chat Id",
             "type": "string"
           },
+          "current_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version Id"
+          },
           "deleted_at": {
             "anyOf": [
               {
@@ -233,6 +245,17 @@
               }
             ],
             "title": "Edited At"
+          },
+          "has_original": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Has Original"
           },
           "id": {
             "format": "uuid",
@@ -308,6 +331,17 @@
             },
             "title": "Unversioned Attachments",
             "type": "array"
+          },
+          "version_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Count"
           },
           "versions": {
             "items": {
@@ -381,6 +415,18 @@
             "title": "Chat Id",
             "type": "string"
           },
+          "current_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version Id"
+          },
           "deleted_at": {
             "anyOf": [
               {
@@ -404,6 +450,17 @@
               }
             ],
             "title": "Edited At"
+          },
+          "has_original": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Has Original"
           },
           "id": {
             "format": "uuid",
@@ -479,6 +536,17 @@
             },
             "title": "Unversioned Attachments",
             "type": "array"
+          },
+          "version_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Count"
           },
           "versions": {
             "items": {
@@ -878,29 +946,8 @@
       },
       "DashboardResponse": {
         "properties": {
-          "api_p95_ms": {
-            "anyOf": [
-              {
-                "type": "integer"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Api P95 Ms"
-          },
-          "api_samples_24h": {
-            "default": 0,
-            "title": "Api Samples 24H",
-            "type": "integer"
-          },
           "chats": {
             "title": "Chats",
-            "type": "integer"
-          },
-          "cleanup_errors_24h": {
-            "default": 0,
-            "title": "Cleanup Errors 24H",
             "type": "integer"
           },
           "failed_downloads": {
@@ -956,18 +1003,8 @@
             "title": "Pending Operations",
             "type": "integer"
           },
-          "recovery_errors_24h": {
-            "default": 0,
-            "title": "Recovery Errors 24H",
-            "type": "integer"
-          },
           "stored_bytes": {
             "title": "Stored Bytes",
-            "type": "integer"
-          },
-          "webhook_errors_24h": {
-            "default": 0,
-            "title": "Webhook Errors 24H",
             "type": "integer"
           }
         },
@@ -1333,6 +1370,18 @@
             "title": "Chat Title",
             "type": "string"
           },
+          "current_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version Id"
+          },
           "deleted_at": {
             "anyOf": [
               {
@@ -1361,6 +1410,17 @@
               }
             ],
             "title": "Edited At"
+          },
+          "has_original": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Has Original"
           },
           "has_reply": {
             "default": false,
@@ -1463,6 +1523,17 @@
             "title": "Unversioned Attachments",
             "type": "array"
           },
+          "version_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Count"
+          },
           "versions": {
             "items": {
               "$ref": "#/components/schemas/MessageVersionResponse"
@@ -1487,6 +1558,56 @@
           "reply_to_message_id"
         ],
         "title": "MessageResponse",
+        "type": "object"
+      },
+      "MessageVersionPage": {
+        "properties": {
+          "current_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version Id"
+          },
+          "has_original": {
+            "title": "Has Original",
+            "type": "boolean"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MessageVersionResponse"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "version_count": {
+            "title": "Version Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "version_count",
+          "has_original",
+          "current_version_id"
+        ],
+        "title": "MessageVersionPage",
         "type": "object"
       },
       "MessageVersionResponse": {
@@ -1693,6 +1814,18 @@
             "title": "Chat Id",
             "type": "string"
           },
+          "current_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Version Id"
+          },
           "deleted_at": {
             "anyOf": [
               {
@@ -1716,6 +1849,17 @@
               }
             ],
             "title": "Edited At"
+          },
+          "has_original": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Has Original"
           },
           "has_reply": {
             "default": false,
@@ -1790,6 +1934,17 @@
             },
             "title": "Unversioned Attachments",
             "type": "array"
+          },
+          "version_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Count"
           },
           "versions": {
             "items": {
@@ -4560,6 +4715,106 @@
         ]
       }
     },
+    "/admin-api/messages/{identifier}/versions": {
+      "get": {
+        "operationId": "administrationMessageVersions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Identifier",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageVersionPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Invalid selection or filters"
+          }
+        },
+        "summary": "Message Versions",
+        "tags": [
+          "administration"
+        ]
+      }
+    },
     "/admin-api/operations": {
       "get": {
         "operationId": "administrationOperations",
@@ -6922,6 +7177,120 @@
         "summary": "Message"
       }
     },
+    "/api/messages/{message_id}/versions": {
+      "get": {
+        "operationId": "adminMessageVersions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "message_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Message Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "header",
+            "name": "authorization",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageVersionPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Message Versions"
+      }
+    },
     "/api/search": {
       "get": {
         "operationId": "adminSearch",
@@ -6931,6 +7300,8 @@
             "name": "q",
             "required": true,
             "schema": {
+              "maxLength": 300,
+              "minLength": 1,
               "title": "Q",
               "type": "string"
             }
@@ -7628,6 +7999,123 @@
         ]
       }
     },
+    "/mini-api/messages/{message_id}/versions": {
+      "get": {
+        "operationId": "miniMessageVersions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "message_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Message Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 30,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "in": "header",
+            "name": "x-telegram-init-data",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Telegram-Init-Data"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageVersionPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        },
+        "summary": "Message Versions",
+        "tags": [
+          "mini-app"
+        ]
+      }
+    },
     "/mini-api/search": {
       "get": {
         "operationId": "miniSearch",
@@ -7637,6 +8125,8 @@
             "name": "q",
             "required": true,
             "schema": {
+              "maxLength": 300,
+              "minLength": 1,
               "title": "Q",
               "type": "string"
             }
