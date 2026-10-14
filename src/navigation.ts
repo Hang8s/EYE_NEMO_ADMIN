@@ -34,3 +34,20 @@ export function navigate(
   const query = new URLSearchParams(params);
   window.location.hash = `/${view}${query.size ? `?${query}` : ""}`;
 }
+
+export const listViews: View[] = [
+  "owners",
+  "participants",
+  "chats",
+  "messages",
+  "media",
+  "operations",
+  "audit",
+];
+export const filterViews: View[] = [
+  "owners",
+  "participants",
+  "chats",
+  "messages",
+  "media",
+];

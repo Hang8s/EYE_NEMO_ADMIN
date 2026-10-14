@@ -54,7 +54,9 @@ const media = {
   download_status: "stored",
   caption: null,
 };
-let fetchMock: ReturnType<typeof vi.fn>;
+let fetchMock: ReturnType<
+  typeof vi.fn<(url: string, init?: RequestInit) => Promise<Response>>
+>;
 beforeEach(() => {
   sessionStorage.clear();
   window.location.hash = "#/overview";
@@ -114,6 +116,39 @@ afterEach(() => {
 });
 
 describe("administration browser flows", () => {
+  it("clears private selection and dialogs when logout fails on the network", async () => {
+    saveToken("test-session");
+    window.location.hash = "#/media";
+    const originalFetch = fetchMock.getMockImplementation()!;
+    fetchMock.mockImplementation(async (url: string, init?: RequestInit) => {
+      if (url.endsWith("/auth/logout")) throw new Error("Network unavailable");
+      return originalFetch(url, init);
+    });
+    render(<App />);
+    fireEvent.click(
+      await screen.findByRole("checkbox", { name: "Вибрати файл report.pdf" }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Стерти вибрані…" }));
+    await screen.findByText("Введіть СТЕРТИ для підтвердження");
+    fireEvent.click(
+      screen.getByRole("button", { name: "Вийти з облікового запису ↗" }),
+    );
+    await screen.findByRole("heading", { name: "Вхід до адмінки" });
+    expect(sessionStorage.length).toBe(0);
+    expect(screen.queryByRole("dialog")).toBeNull();
+    fireEvent.change(screen.getByLabelText("Логін"), {
+      target: { value: "admin" },
+    });
+    fireEvent.change(screen.getByLabelText("Пароль"), {
+      target: { value: "password" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Увійти →" }));
+    const checkbox = await screen.findByRole("checkbox", {
+      name: "Вибрати файл report.pdf",
+    });
+    expect((checkbox as HTMLInputElement).checked).toBe(false);
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
   it("handles an invalid date in the URL without crashing the filters", async () => {
     saveToken("test-session");
     window.location.hash = "#/media?date_from=invalid-date";
