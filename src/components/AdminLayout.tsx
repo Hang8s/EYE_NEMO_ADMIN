@@ -109,21 +109,6 @@ export default function AdminLayout({
           </div>
           {scoped.length > 0 && (
             <div className="scope-bar">
-              {scoped.map((key) => (
-                <span key={key}>
-                  {
-                    (
-                      {
-                        owner_id: "Власник",
-                        participant_id: "Відправник",
-                        chat_id: "Чат",
-                        message_id: "Повідомлення",
-                      } as Record<string, string>
-                    )[key]
-                  }
-                  : <b>{params.get(key)}</b>
-                </span>
-              ))}
               {view === "messages" && (
                 <button
                   onClick={() => {
@@ -138,7 +123,7 @@ export default function AdminLayout({
             </div>
           )}
           {filterViews.includes(view) && (
-            <Filters view={view} params={params} />
+            <Filters key={`${view}:${params}`} view={view} params={params} />
           )}
           {children}
         </main>

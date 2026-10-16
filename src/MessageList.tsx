@@ -85,38 +85,10 @@ export function MessageCard({
           </button>
         ))}
       </div>
-      {!!item.version_count && <details onToggle={event => setHistoryOpen(event.currentTarget.open)}>
-        <summary>Історія: {item.version_count} версій</summary>
-        {historyOpen && <VersionHistory id={item.id} showMedia={showMedia} />}
+      {(item.version_count ?? versions.length) > 0 && <details onToggle={event => setHistoryOpen(event.currentTarget.open)}>
+        <summary>Історія змін · {item.version_count ?? versions.length}</summary>
+        {historyOpen && <VersionHistory id={item.id} versions={item.version_count == null ? versions : undefined} showMedia={showMedia} />}
       </details>}
-      {item.version_count == null && versions.length > 0 && (
-        <details>
-          <summary>Історія: {versions.length} версій</summary>
-          {versions.map((v) => (
-            <div className="version" key={v.id}>
-              <small>
-                {v.kind === "original"
-                  ? "Оригінал"
-                  : v.kind === "edit"
-                    ? "Редагування"
-                    : "Попередній архів"}{" "}
-                · {date(v.edited_at || v.observed_at)}
-              </small>
-              <p>{v.text || v.caption || "Без тексту"}</p>
-              {v.attachments.map((a) => (
-                <button
-                  key={a.id}
-                  disabled={!a.available}
-                  onClick={() => showMedia(a)}
-                >
-                  {a.file_name || typeNames[a.type]}
-                  {!a.available ? " · Недоступний" : ""}
-                </button>
-              ))}
-            </div>
-          ))}
-        </details>
-      )}
       {unversioned.length > 0 && (
         <details>
           <summary>Файли з невідомою версією</summary>

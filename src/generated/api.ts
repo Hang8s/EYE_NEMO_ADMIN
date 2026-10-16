@@ -3387,6 +3387,7 @@ export interface operations {
             query?: {
                 limit?: number;
                 cursor?: string | null;
+                q?: string;
             };
             header?: {
                 "x-telegram-init-data"?: string | null;
@@ -3694,10 +3695,13 @@ export interface operations {
     };
     miniSearch: {
         parameters: {
-            query: {
-                q: string;
+            query?: {
+                q?: string;
                 limit?: number;
                 chat_id?: string | null;
+                content_type?: ("photo" | "video" | "document") | null;
+                edited?: boolean | null;
+                deleted?: boolean | null;
             };
             header?: {
                 "x-telegram-init-data"?: string | null;

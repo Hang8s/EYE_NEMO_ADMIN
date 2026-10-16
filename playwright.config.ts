@@ -11,6 +11,12 @@ export default defineConfig({
   },
   webServer: [
     {
+      command: "npm --prefix ../frontend run dev -- --host 127.0.0.1 --port 5179",
+      url: "http://127.0.0.1:5179/EYE_NEMO_FRONTEND/",
+      reuseExistingServer: false,
+      env: { VITE_API_BASE_URL: "http://127.0.0.1:8018" },
+    },
+    {
       command:
         "uv run --project ../backend --directory ../backend python -m scripts.preview_admin",
       url: "http://127.0.0.1:8018/health",

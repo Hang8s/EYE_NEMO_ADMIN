@@ -27,7 +27,7 @@ test("browser → API → database: login, chat, media, scoped block, purge, aud
   ).toBeVisible();
   await expect(page.getByText("Перша редакція матеріалів", { exact: true })).toHaveCount(0);
   const versionResponse = page.waitForResponse(response => response.url().includes("/versions?") && response.status() === 200);
-  await page.getByText("Історія: 2 версій", { exact: true }).click();
+  await page.getByText("Історія змін · 2", { exact: true }).click();
   await versionResponse;
   await expect(page.getByText("Перша редакція матеріалів", { exact: true })).toBeVisible();
   await page.screenshot({ path: "test-results/chat.png", fullPage: true });
@@ -42,11 +42,13 @@ test("browser → API → database: login, chat, media, scoped block, purge, aud
     .getByRole("link", { name: "Співрозмовники", exact: false })
     .click();
   await page.getByRole("button", { name: "Відкрити →" }).click();
-  await page.getByLabel("Обсяг дії: Telegram ID власника").fill("100");
+  await page.getByRole('button', { name: 'Обсяг дії: власник Обрати…' }).click();
+  await page.getByRole('button', { name: /Юрій.*100/ }).click();
   await page.getByRole("button", { name: "Заблокувати архівування" }).click();
   await expect(page.getByText("Архівування заблоковано")).toBeVisible();
   await page.getByRole("button", { name: "Відкрити →" }).click();
-  await page.getByLabel("Обсяг дії: Telegram ID власника").fill("100");
+  await page.getByRole('button', { name: 'Обсяг дії: власник Обрати…' }).click();
+  await page.getByRole('button', { name: /Юрій.*100/ }).click();
   await expect(
     page.getByRole("button", { name: "Розблокувати", exact: true }),
   ).toBeEnabled();

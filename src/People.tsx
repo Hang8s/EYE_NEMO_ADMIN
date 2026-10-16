@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Dialog } from "./Dialogs";
 import { date, type Person, type Purge, request, type Schemas } from "./api";
 import { navigate } from "./navigation";
+import { EntityPicker } from './EntityPicker';
 
 export default function People({
   items,
@@ -165,20 +166,14 @@ function PersonDialog({
         </span>
       </div>
       {kind === "participant" && (
-        <label>
-          Обсяг дії: Telegram ID власника
-          <input
-            aria-label="Обсяг дії: Telegram ID власника"
-            type="number"
-            value={scope}
-            onChange={(e) => setScope(e.target.value)}
-            placeholder="Порожнє поле — усі архіви"
-          />
+        <div>
+          <EntityPicker name="owner_id" label="Обсяг дії: власник" endpoint="owners" initialValue="" onChange={setScope} />
+          <small>{scope ? 'Обраний архів власника' : 'Усі архіви'}</small>
           <small>
             Перегляд чатів показує обидві сторони розмови. Медіатека — файли
             цього відправника.
           </small>
-        </label>
+        </div>
       )}
       {kind === "owner" && <Connections ownerId={person.telegram_id} />}
       <div className="actions">

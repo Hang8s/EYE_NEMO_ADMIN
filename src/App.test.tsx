@@ -101,6 +101,7 @@ beforeEach(() => {
       return new Response(
         JSON.stringify({ items: [person], next_cursor: null }),
       );
+    if (path.startsWith('/owners?')) return new Response(JSON.stringify({ items: [{ ...person, telegram_id: 100, name: 'Owner' }], next_cursor: null }));
     if (path.startsWith("/media?"))
       return new Response(
         JSON.stringify({ items: [media], next_cursor: null }),
@@ -182,9 +183,9 @@ describe("administration browser flows", () => {
     window.location.hash = "#/participants";
     render(<App />);
     fireEvent.click(await screen.findByRole("button", { name: "Відкрити →" }));
-    fireEvent.change(screen.getByLabelText("Обсяг дії: Telegram ID власника"), {
-      target: { value: "100" },
-    });
+    fireEvent.click(screen.getByRole('button', { name: 'Обсяг дії: власник Обрати…' }));
+    fireEvent.change(screen.getByLabelText('Пошук: Обсяг дії: власник'), { target: { value: 'Owner' } });
+    fireEvent.click(await screen.findByRole('button', { name: /Owner @alice · 100/ }));
     const button = screen.getByRole("button", {
       name: "Заблокувати архівування",
     });
@@ -241,9 +242,7 @@ describe("administration browser flows", () => {
     render(<App />);
     await screen.findByText("report.pdf");
     fireEvent.click(screen.getByRole("button", { name: /Фільтри/ }));
-    expect(
-      (screen.getByLabelText("Telegram ID власника") as HTMLInputElement).value,
-    ).toBe("100");
+    expect(await screen.findByRole('button', { name: 'Власник Owner' })).toBeTruthy();
     expect(
       (screen.getByLabelText("Доступність файла") as HTMLSelectElement).value,
     ).toBe("stored");
