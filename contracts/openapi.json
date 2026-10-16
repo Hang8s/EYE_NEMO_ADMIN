@@ -1440,6 +1440,17 @@
             "title": "Is Outgoing",
             "type": "boolean"
           },
+          "match_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Text"
+          },
           "message_type": {
             "title": "Message Type",
             "type": "string"
@@ -1480,6 +1491,18 @@
               }
             ],
             "title": "Reply To Telegram Message Id"
+          },
+          "sender_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sender Id"
           },
           "sender_name": {
             "title": "Sender Name",
@@ -1552,9 +1575,9 @@
           "is_outgoing",
           "sender_name",
           "attachments",
+          "chat_title",
           "owner_id",
           "sender_telegram_id",
-          "chat_title",
           "reply_to_message_id"
         ],
         "title": "MessageResponse",
@@ -1743,6 +1766,17 @@
             ],
             "title": "Last Message At"
           },
+          "last_message_preview": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Message Preview"
+          },
           "title": {
             "title": "Title",
             "type": "string"
@@ -1814,6 +1848,17 @@
             "title": "Chat Id",
             "type": "string"
           },
+          "chat_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chat Title"
+          },
           "current_version_id": {
             "anyOf": [
               {
@@ -1879,6 +1924,17 @@
             "title": "Is Outgoing",
             "type": "boolean"
           },
+          "match_text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Match Text"
+          },
           "message_type": {
             "title": "Message Type",
             "type": "string"
@@ -1903,6 +1959,18 @@
               }
             ],
             "title": "Reply To Telegram Message Id"
+          },
+          "sender_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sender Id"
           },
           "sender_name": {
             "title": "Sender Name",
@@ -2049,6 +2117,18 @@
               }
             ],
             "title": "Reply To Telegram Message Id"
+          },
+          "sender_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sender Id"
           },
           "sender_name": {
             "title": "Sender Name",
@@ -7746,6 +7826,40 @@
             }
           },
           {
+            "in": "query",
+            "name": "around",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Around"
+            }
+          },
+          {
+            "in": "query",
+            "name": "at",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "At"
+            }
+          },
+          {
             "in": "header",
             "name": "x-telegram-init-data",
             "required": false,
@@ -8141,6 +8255,23 @@
               "minimum": 1,
               "title": "Limit",
               "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "chat_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Chat Id"
             }
           },
           {

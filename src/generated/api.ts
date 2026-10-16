@@ -1163,6 +1163,8 @@ export interface components {
             is_deleted: boolean;
             /** Is Outgoing */
             is_outgoing: boolean;
+            /** Match Text */
+            match_text?: string | null;
             /** Message Type */
             message_type: string;
             /** Owner Id */
@@ -1172,6 +1174,8 @@ export interface components {
             reply_to_message_id: string | null;
             /** Reply To Telegram Message Id */
             reply_to_telegram_message_id?: number | null;
+            /** Sender Id */
+            sender_id?: string | null;
             /** Sender Name */
             sender_name: string;
             /** Sender Telegram Id */
@@ -1251,6 +1255,8 @@ export interface components {
             id: string;
             /** Last Message At */
             last_message_at?: string | null;
+            /** Last Message Preview */
+            last_message_preview?: string | null;
             /** Title */
             title: string;
             /**
@@ -1277,6 +1283,8 @@ export interface components {
              * Format: uuid
              */
             chat_id: string;
+            /** Chat Title */
+            chat_title?: string | null;
             /** Current Version Id */
             current_version_id?: string | null;
             /** Deleted At */
@@ -1299,11 +1307,15 @@ export interface components {
             is_deleted: boolean;
             /** Is Outgoing */
             is_outgoing: boolean;
+            /** Match Text */
+            match_text?: string | null;
             /** Message Type */
             message_type: string;
             reply_to?: components["schemas"]["MiniReplyResponse"] | null;
             /** Reply To Telegram Message Id */
             reply_to_telegram_message_id?: number | null;
+            /** Sender Id */
+            sender_id?: string | null;
             /** Sender Name */
             sender_name: string;
             /**
@@ -1355,6 +1367,8 @@ export interface components {
             message_type: string;
             /** Reply To Telegram Message Id */
             reply_to_telegram_message_id?: number | null;
+            /** Sender Id */
+            sender_id?: string | null;
             /** Sender Name */
             sender_name: string;
             /**
@@ -3435,6 +3449,8 @@ export interface operations {
                 before?: string | null;
                 limit?: number;
                 cursor?: string | null;
+                around?: string | null;
+                at?: string | null;
             };
             header?: {
                 "x-telegram-init-data"?: string | null;
@@ -3681,6 +3697,7 @@ export interface operations {
             query: {
                 q: string;
                 limit?: number;
+                chat_id?: string | null;
             };
             header?: {
                 "x-telegram-init-data"?: string | null;
